@@ -22,4 +22,3 @@ color = Color(0.184314, 0.184314, 0.184314, 1)
 [node name="Pie" parent="." instance=ExtResource("1_13wa3")]
 position = Vector2(928, 528)
 scale = Vector2(0.8, 0.8)
-Colors = PackedColorArray(0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1)

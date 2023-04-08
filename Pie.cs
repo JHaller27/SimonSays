@@ -1,38 +1,38 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 namespace SimonSays;
 
 public partial class Pie : Node2D
 {
-	[Export] private Color[] Colors { get; set; }
+	[Export] private Slice Top { get; set; }
+	[Export] private Slice Bottom { get; set; }
+	[Export] private Slice Left { get; set; }
+	[Export] private Slice Right { get; set; }
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	private static readonly Dictionary<string, Func<Pie, Slice>> ActionMap = new()
 	{
-		this.RecolorChildren();
-	}
+		["simon_up"] = p => p.Top,
+		["simon_down"] = p => p.Bottom,
+		["simon_left"] = p => p.Left,
+		["simon_right"] = p => p.Right,
+	};
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _Input(InputEvent inputEvent)
 	{
-	}
-
-	private List<Node2D> ListSlices()
-	{
-		return this.GetChildren()
-			.Cast<Node2D>()
-			.ToList();
-	}
-
-	private void RecolorChildren()
-	{
-		List<Node2D> slices = this.ListSlices();
-		for (int i = 0; i < slices.Count; i++)
+		foreach ((string name, Func<Pie, Slice> sliceGetter) in ActionMap)
 		{
-			Node2D slice = slices[i];
-			slice.Modulate = this.Colors[i % this.Colors.Length];
+			if (inputEvent.IsActionPressed(name))
+			{
+				Slice slice = sliceGetter(this);
+				slice.SetActive(true);
+			}
+			else if (inputEvent.IsActionReleased(name))
+			{
+				Slice slice = sliceGetter(this);
+				slice.SetActive(false);
+			}
 		}
 	}
 }

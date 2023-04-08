@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://c38fybehfv2jl"]
+[gd_scene load_steps=3 format=3 uid="uid://c38fybehfv2jl"]
 
+[ext_resource type="Script" path="res://Slice.cs" id="1_5nux6"]
 [ext_resource type="Texture2D" uid="uid://de0d5ufxxwhpe" path="res://slice.png" id="1_d5gty"]
 
 [node name="Slice" type="Node2D"]
+script = ExtResource("1_5nux6")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(0, -16)
