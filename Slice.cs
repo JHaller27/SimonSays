@@ -9,6 +9,8 @@ public partial class Slice : Node2D
 
 	private State CurrentState { get; set; }
 
+	public bool IsActive() => this.CurrentState is ActiveState;
+
 	public override void _Ready()
 	{
 		base._Ready();

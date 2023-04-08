@@ -9,6 +9,7 @@ public partial class MainScene : Control
 	[Export] private Pie Pie { get; set; }
 
 	private Game Game { get; set; }
+	private Random Random = new();
 
 	private static readonly Dictionary<string, Func<Pie, Slice>> ActionMap = new()
 	{
@@ -22,29 +23,34 @@ public partial class MainScene : Control
 	{
 		if (!this.Game.AcceptUserInput) return;
 
+		if (inputEvent.IsActionPressed("ui_accept"))
+		{
+			Slice slice = this.Pie.RandomSlice(this.Random);
+			this.Game.AddMove(new(new()
+			{
+				slice,
+			}));
+			return;
+		}
+
 		// Handle slice selection
 		foreach ((string name, Func<Pie, Slice> sliceGetter) in ActionMap)
 		{
-			if (inputEvent.IsActionPressed(name))
+			Slice slice = sliceGetter(this.Pie);
+
+			if (inputEvent.IsActionPressed(name) && !slice.IsActive())
 			{
-				Slice slice = sliceGetter(this.Pie);
 				slice.SetActive(true);
 			}
-			else if (inputEvent.IsActionReleased(name))
+			else if (inputEvent.IsActionReleased(name) && slice.IsActive())
 			{
-				Slice slice = sliceGetter(this.Pie);
 				slice.SetActive(false);
 			}
 		}
 	}
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		this.Game = new(this.Pie);
-		this.Game.AddMove(new(new()
-		{
-			this.Pie.Top,
-		})).GetAwaiter().GetResult();
 	}
 }

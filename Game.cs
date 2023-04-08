@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Godot;
 
 namespace SimonSays;
 
@@ -8,7 +8,7 @@ public class Game
 {
 	private List<Move> Moves = new();
 	private Pie Pie;
-	private int MoveIdx;
+	private int VerifyMoveIdx;
 
 	public bool AcceptUserInput { get; private set; }
 
@@ -16,18 +16,17 @@ public class Game
 	{
 		this.Pie = pie;
 		this.AcceptUserInput = true;
+
+		this.Pie.SimulationDone += this.AfterSimulation;
 	}
 
-	public async Task AddMove(Move move)
+	public void AddMove(Move move)
 	{
-		this.MoveIdx = 0;
+		this.VerifyMoveIdx = 0;
 		this.AcceptUserInput = false;
 
-		await this.Replay();
 		this.Moves.Add(move);
-		await this.Pie.SimulateSlices(move.Slices);
-
-		this.AcceptUserInput = true;
+		this.PlayMoves();
 	}
 
 	public bool VerifyPlayerMove(IEnumerable<Slice> activeSlices)
@@ -39,7 +38,7 @@ public class Game
 
 		HashSet<Slice> activeSliceSet = activeSlices.ToHashSet();
 
-		List<Slice> expectedSlices = this.Moves[this.MoveIdx++].Slices;
+		List<Slice> expectedSlices = this.Moves[this.VerifyMoveIdx++].Slices;
 		HashSet<Slice> expectedSliceSet = expectedSlices.ToHashSet();
 
 		return // Return true if...
@@ -49,13 +48,14 @@ public class Game
 			activeSliceSet.ToList().TrueForAll(s => expectedSliceSet.Contains(s));
 	}
 
-	private async Task Replay()
+	private void PlayMoves()
 	{
-		foreach (Move move in this.Moves)
-		{
-			await this.Pie.SimulateSlices(move.Slices);
-		}
+		this.Pie.SimulateMoves(this.Moves);
 	}
 
-	public record Move(List<Slice> Slices);
+	private void AfterSimulation()
+	{
+		GD.Print("After simulation");
+		this.AcceptUserInput = true;
+	}
 }
