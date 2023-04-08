@@ -1,38 +1,37 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 
 namespace SimonSays;
 
 public partial class Pie : Node2D
 {
-	[Export] private Slice Top { get; set; }
-	[Export] private Slice Bottom { get; set; }
-	[Export] private Slice Left { get; set; }
-	[Export] private Slice Right { get; set; }
+	[Export] public Slice Top { get; private set; }
+	[Export] public Slice Bottom { get; private set; }
+	[Export] public Slice Left { get; private set; }
+	[Export] public Slice Right { get; private set; }
 
-	private static readonly Dictionary<string, Func<Pie, Slice>> ActionMap = new()
+	public async Task SimulateSlices(IEnumerable<Slice> slices)
 	{
-		["simon_up"] = p => p.Top,
-		["simon_down"] = p => p.Bottom,
-		["simon_left"] = p => p.Left,
-		["simon_right"] = p => p.Right,
-	};
+		IEnumerable<Slice> sliceList = slices as Slice[] ?? slices.ToArray();
 
-	public override void _Input(InputEvent inputEvent)
-	{
-		foreach ((string name, Func<Pie, Slice> sliceGetter) in ActionMap)
+		foreach (Slice slice in sliceList)
 		{
-			if (inputEvent.IsActionPressed(name))
-			{
-				Slice slice = sliceGetter(this);
-				slice.SetActive(true);
-			}
-			else if (inputEvent.IsActionReleased(name))
-			{
-				Slice slice = sliceGetter(this);
-				slice.SetActive(false);
-			}
+			slice.SetActive(true);
+		}
+
+		// Wait a second or so...
+		// Could use the following commented-out line, but that requires async-propagation ick.
+		// Prefer to instead use _Process(double delta) with state-machine-like behavior...
+		// which is also ugly, but I prefer complicated architecture over complicated async things.
+
+		// WHEN THIS IS REMOVED, also remove the async-propagation!!!
+		// await ToSignal(GetTree().CreateTimer(1), SceneTreeTimer.SignalName.Timeout);
+
+		foreach (Slice slice in sliceList)
+		{
+			slice.SetActive(false);
 		}
 	}
 }
