@@ -22,3 +22,5 @@ offset_bottom = 104.5
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_d5gty")
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]

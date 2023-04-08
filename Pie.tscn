@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cn0sxda11cq7e"]
+[gd_scene load_steps=7 format=3 uid="uid://cn0sxda11cq7e"]
 
 [ext_resource type="PackedScene" uid="uid://c38fybehfv2jl" path="res://Slice.tscn" id="1_dscms"]
 [ext_resource type="Script" path="res://Pie.cs" id="1_ysqe7"]
+[ext_resource type="AudioStream" uid="uid://b1j1lmosi5xau" path="res://tones/viola/viola_d5.wav" id="3_g0uvj"]
+[ext_resource type="AudioStream" uid="uid://bowvx2x4dlwg7" path="res://tones/viola/viola_d4.wav" id="4_o1f3q"]
+[ext_resource type="AudioStream" uid="uid://c13gs0fuwdqtn" path="res://tones/viola/viola_fs4.wav" id="5_hrbir"]
+[ext_resource type="AudioStream" uid="uid://b2w3me6by2a65" path="res://tones/viola/viola_a4.wav" id="6_4yhod"]
 
 [node name="Pie" type="Control" node_paths=PackedStringArray("Top", "Bottom", "Left", "Right")]
 layout_mode = 3
@@ -19,6 +23,7 @@ offset_top = -384.0
 offset_bottom = -384.0
 ActiveColor = Color(0, 0, 1, 1)
 InactiveColor = Color(0, 0, 0.501961, 1)
+AudioStream = ExtResource("3_g0uvj")
 
 [node name="BottomSlice" parent="." instance=ExtResource("1_dscms")]
 offset_top = 384.0
@@ -26,6 +31,7 @@ offset_bottom = 384.0
 rotation = 3.14159
 ActiveColor = Color(1, 0, 0, 1)
 InactiveColor = Color(0.5, 0, 0, 1)
+AudioStream = ExtResource("4_o1f3q")
 
 [node name="LeftSlice" parent="." instance=ExtResource("1_dscms")]
 offset_left = -384.0
@@ -33,6 +39,7 @@ offset_right = -384.0
 rotation = -1.5708
 ActiveColor = Color(0, 1, 0, 1)
 InactiveColor = Color(0, 0.5, 0, 1)
+AudioStream = ExtResource("5_hrbir")
 
 [node name="RightSlice" parent="." instance=ExtResource("1_dscms")]
 offset_left = 384.0
@@ -40,6 +47,7 @@ offset_right = 384.0
 rotation = 1.5708
 ActiveColor = Color(1, 1, 0, 1)
 InactiveColor = Color(0.5, 0.5, 0, 1)
+AudioStream = ExtResource("6_4yhod")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

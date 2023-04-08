@@ -6,20 +6,28 @@ public partial class Slice : Control
 {
 	[Export] private Color ActiveColor { get; set; }
 	[Export] private Color InactiveColor { get; set; }
-
-	private State CurrentState { get; set; }
+	[Export] private AudioStream AudioStream;
 
 	public bool IsActive() => this.CurrentState is ActiveState;
+
+	private State CurrentState { get; set; }
+	private AudioStreamPlayer AudioPlayer() => this.GetNode<AudioStreamPlayer>("AudioPlayer");
 
 	public override void _Ready()
 	{
 		base._Ready();
 		this.SetState(new InactiveState(this));
+
+		this.AudioPlayer().Stream = this.AudioStream;
 	}
 
 	public void SetActive(bool isActive)
 	{
 		this.SetState(isActive ? new ActiveState(this) : new InactiveState(this));
+		if (isActive)
+		{
+			this.AudioPlayer().Play();
+		}
 	}
 
 	private void SetState(State state)
