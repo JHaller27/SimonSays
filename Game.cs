@@ -38,14 +38,10 @@ public class Game
 
 		HashSet<Slice> activeSliceSet = activeSlices.ToHashSet();
 
-		List<Slice> expectedSlices = this.Moves[this.VerifyMoveIdx++].Slices;
-		HashSet<Slice> expectedSliceSet = expectedSlices.ToHashSet();
+		HashSet<Slice> expectedSlicesSet = this.Moves[this.VerifyMoveIdx++].Slices;
 
-		return // Return true if...
-			// ...all expected slices are active and...
-			expectedSlices.TrueForAll(s => activeSliceSet.Contains(s)) &&
-			// ...all active slices are expected
-			activeSliceSet.ToList().TrueForAll(s => expectedSliceSet.Contains(s));
+		return expectedSlicesSet.IsSubsetOf(activeSliceSet) &&
+			   activeSliceSet.IsSubsetOf(expectedSlicesSet);
 	}
 
 	private void PlayMoves()
