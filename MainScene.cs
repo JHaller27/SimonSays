@@ -18,6 +18,12 @@ public partial class MainScene : Control
 		["simon_right"] = p => p.Right,
 	};
 
+	public override void _Ready()
+	{
+		this.Game = new(this.Pie);
+		this.Game.AddRandomMove();
+	}
+
 	public override void _Input(InputEvent inputEvent)
 	{
 		if (!this.Game.AcceptUserInput) return;
@@ -41,8 +47,7 @@ public partial class MainScene : Control
 					// If slice is wrong...
 					GD.Print("Wrong slice!");
 					slice.SetActive(false);
-					this.Game.ResetMoveVerification();
-					this.Game.PlayMoves();
+					this.ResetRound();
 				}
 			}
 			else if (inputEvent.IsActionReleased(name) && slice.IsActive())
@@ -52,8 +57,7 @@ public partial class MainScene : Control
 				{
 					// If released a slice when not all expected slices were pressed...
 					GD.Print("Missing slice!");
-					this.Game.ResetMoveVerification();
-					this.Game.PlayMoves();
+					this.ResetRound();
 				}
 				else
 				{
@@ -61,10 +65,7 @@ public partial class MainScene : Control
 					GD.Print("Correct move!");
 					if (this.Game.VerifyRound())
 					{
-						GD.Print("Next round...\n");
-						this.Game.ResetMoveVerification();
-						this.Game.AddRandomMove();
-						this.Game.PlayMoves();
+						this.AdvanceRound();
 					}
 					else
 					{
@@ -75,9 +76,17 @@ public partial class MainScene : Control
 		}
 	}
 
-	public override void _Ready()
+	private void ResetRound()
 	{
-		this.Game = new(this.Pie);
+		this.Game.ResetMoveVerification();
+		this.Game.PlayMoves();
+	}
+
+	private void AdvanceRound()
+	{
+		GD.Print("Next round...\n");
+		this.Game.ResetMoveVerification();
 		this.Game.AddRandomMove();
+		this.Game.PlayMoves();
 	}
 }
