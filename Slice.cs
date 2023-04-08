@@ -2,7 +2,7 @@ using Godot;
 
 namespace SimonSays;
 
-public partial class Slice : Node2D
+public partial class Slice : Control
 {
 	[Export] private Color ActiveColor { get; set; }
 	[Export] private Color InactiveColor { get; set; }

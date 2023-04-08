@@ -5,7 +5,7 @@ using Godot;
 
 namespace SimonSays;
 
-public partial class Pie : Node2D
+public partial class Pie : Control
 {
 	[Export] public Slice Top { get; private set; }
 	[Export] public Slice Bottom { get; private set; }

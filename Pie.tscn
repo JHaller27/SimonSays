@@ -3,7 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://c38fybehfv2jl" path="res://Slice.tscn" id="1_dscms"]
 [ext_resource type="Script" path="res://Pie.cs" id="1_ysqe7"]
 
-[node name="Pie" type="Node2D" node_paths=PackedStringArray("Top", "Bottom", "Left", "Right")]
+[node name="Pie" type="Control" node_paths=PackedStringArray("Top", "Bottom", "Left", "Right")]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_ysqe7")
 Top = NodePath("TopSlice")
 Bottom = NodePath("BottomSlice")
@@ -13,24 +15,28 @@ ActivateTime = 0.5
 GapTime = 0.5
 
 [node name="TopSlice" parent="." instance=ExtResource("1_dscms")]
-position = Vector2(0, -384)
+offset_top = -384.0
+offset_bottom = -384.0
 ActiveColor = Color(0, 0, 1, 1)
 InactiveColor = Color(0, 0, 0.501961, 1)
 
 [node name="BottomSlice" parent="." instance=ExtResource("1_dscms")]
-position = Vector2(0, 384)
+offset_top = 384.0
+offset_bottom = 384.0
 rotation = 3.14159
 ActiveColor = Color(1, 0, 0, 1)
 InactiveColor = Color(0.5, 0, 0, 1)
 
 [node name="LeftSlice" parent="." instance=ExtResource("1_dscms")]
-position = Vector2(-384, 0)
+offset_left = -384.0
+offset_right = -384.0
 rotation = -1.5708
 ActiveColor = Color(0, 1, 0, 1)
 InactiveColor = Color(0, 0.5, 0, 1)
 
 [node name="RightSlice" parent="." instance=ExtResource("1_dscms")]
-position = Vector2(384, 0)
+offset_left = 384.0
+offset_right = 384.0
 rotation = 1.5708
 ActiveColor = Color(1, 1, 0, 1)
 InactiveColor = Color(0.5, 0.5, 0, 1)
