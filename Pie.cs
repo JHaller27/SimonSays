@@ -37,6 +37,11 @@ public partial class Pie : Node2D
 		};
 	}
 
+	public IEnumerable<Slice> ActiveSlices()
+	{
+		return this.AllSlices().Where(s => s.IsActive());
+	}
+
 	public void SimulateMoves(IEnumerable<Move> moves)
 	{
 		List<Move> moveList = moves.ToList();
@@ -61,8 +66,9 @@ public partial class Pie : Node2D
 
 	private static void ActivateSlices(IEnumerable<Slice> slices)
 	{
-		GD.Print("Activating slices");
-		foreach (Slice slice in slices)
+		List<Slice> sliceList = slices.ToList();
+		GD.Print($"Activating {sliceList.Count} slices");
+		foreach (Slice slice in sliceList)
 		{
 			slice.SetActive(true);
 		}
@@ -76,5 +82,16 @@ public partial class Pie : Node2D
 		{
 			slice.SetActive(false);
 		}
+	}
+
+	private Slice[] AllSlices()
+	{
+		return new[]
+		{
+			this.Top,
+			this.Bottom,
+			this.Left,
+			this.Right,
+		};
 	}
 }

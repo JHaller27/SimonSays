@@ -9,7 +9,6 @@ public partial class MainScene : Control
 	[Export] private Pie Pie { get; set; }
 
 	private Game Game { get; set; }
-	private readonly Random Random = new();
 
 	private static readonly Dictionary<string, Func<Pie, Slice>> ActionMap = new()
 	{
@@ -25,11 +24,7 @@ public partial class MainScene : Control
 
 		if (inputEvent.IsActionPressed("ui_accept"))
 		{
-			Slice slice = this.Pie.RandomSlice(this.Random);
-			this.Game.AddMove(new(new()
-			{
-				slice,
-			}));
+			this.Game.PlayMoves();
 			return;
 		}
 
@@ -41,10 +36,41 @@ public partial class MainScene : Control
 			if (inputEvent.IsActionPressed(name) && !slice.IsActive())
 			{
 				slice.SetActive(true);
+				if (!this.Game.VerifySlice(slice))
+				{
+					// If slice is wrong...
+					GD.Print("Wrong slice!");
+					slice.SetActive(false);
+					this.Game.ResetMoveVerification();
+					this.Game.PlayMoves();
+				}
 			}
 			else if (inputEvent.IsActionReleased(name) && slice.IsActive())
 			{
 				slice.SetActive(false);
+				if (!this.Game.VerifyMove())
+				{
+					// If released a slice when not all expected slices were pressed...
+					GD.Print("Missing slice!");
+					this.Game.ResetMoveVerification();
+					this.Game.PlayMoves();
+				}
+				else
+				{
+					// Slice released when all expected slices were pressed
+					GD.Print("Correct move!");
+					if (this.Game.VerifyRound())
+					{
+						GD.Print("Next round...\n");
+						this.Game.ResetMoveVerification();
+						this.Game.AddRandomMove();
+						this.Game.PlayMoves();
+					}
+					else
+					{
+						this.Game.AdvanceMoveVerification();
+					}
+				}
 			}
 		}
 	}
@@ -52,5 +78,6 @@ public partial class MainScene : Control
 	public override void _Ready()
 	{
 		this.Game = new(this.Pie);
+		this.Game.AddRandomMove();
 	}
 }

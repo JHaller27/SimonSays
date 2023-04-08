@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -8,7 +9,9 @@ public class Game
 {
 	private readonly List<Move> Moves = new();
 	private readonly Pie Pie;
-	private int VerifyMoveIdx;
+	private int NextVerifyMoveIdx;
+	private HashSet<Slice> CurrentMoveSet;
+	private readonly Random Random = new();
 
 	public bool AcceptUserInput { get; private set; }
 
@@ -20,33 +23,69 @@ public class Game
 		this.Pie.SimulationDone += this.AfterSimulation;
 	}
 
-	public void AddMove(Move move)
+	public void AddRandomMove()
 	{
-		this.VerifyMoveIdx = 0;
-		this.AcceptUserInput = false;
-
-		this.Moves.Add(move);
-		this.PlayMoves();
+		Slice slice = this.Pie.RandomSlice(this.Random);
+		this.AddMove(new(new()
+		{
+			slice,
+		}));
+		this.ResetMoveVerification();
 	}
 
-	public bool VerifyPlayerMove(IEnumerable<Slice> activeSlices)
+	public bool VerifySlice(Slice activeSlice)
 	{
 		if (!this.AcceptUserInput)
 		{
 			throw new("Game is still replaying");
 		}
 
-		HashSet<Slice> activeSliceSet = activeSlices.ToHashSet();
+		if (!this.CurrentMoveSet.Contains(activeSlice))
+		{
+			return false;
+		}
 
-		HashSet<Slice> expectedSlicesSet = this.Moves[this.VerifyMoveIdx++].Slices;
-
-		return expectedSlicesSet.IsSubsetOf(activeSliceSet) &&
-			   activeSliceSet.IsSubsetOf(expectedSlicesSet);
+		this.CurrentMoveSet.Remove(activeSlice);
+		return true;
 	}
 
-	private void PlayMoves()
+	public bool VerifyMove()
 	{
+		return this.CurrentMoveSet.Count == 0;
+	}
+
+	public bool VerifyRound()
+	{
+		return this.NextVerifyMoveIdx >= this.Moves.Count;
+	}
+
+	public void PlayMoves()
+	{
+		this.AcceptUserInput = false;
 		this.Pie.SimulateMoves(this.Moves);
+	}
+
+	public void ResetMoveVerification()
+	{
+		this.NextVerifyMoveIdx = 0;
+		this.SetupMoveVerification();
+	}
+
+	public void AdvanceMoveVerification()
+	{
+		this.SetupMoveVerification();
+	}
+
+	private void AddMove(Move move)
+	{
+		this.Moves.Add(move);
+	}
+
+	private void SetupMoveVerification()
+	{
+		if (this.NextVerifyMoveIdx >= this.Moves.Count) return;
+
+		this.CurrentMoveSet = this.Moves[this.NextVerifyMoveIdx++].Slices.ToHashSet();
 	}
 
 	private void AfterSimulation()
