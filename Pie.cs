@@ -25,21 +25,19 @@ public partial class Pie : Control
 		this.BetterTimer = new(this.GetNode<Timer>("Timer"));
 	}
 
-	public Slice RandomSlice(Random random)
+	public IEnumerable<Slice> RandomSlices()
 	{
-		return random.Next(4) switch
-		{
-			0 => this.Top,
-			1 => this.Bottom,
-			2 => this.Left,
-			3 => this.Right,
-			_ => throw new("Random value out of range"),
-		};
-	}
+		List<Slice> allSlices = this.AllSlices().ToList();
+		int k = Globals.WeightedRandom(new[] {70, 15, 10, 5}) + 1;
 
-	public IEnumerable<Slice> ActiveSlices()
-	{
-		return this.AllSlices().Where(s => s.IsActive());
+		for (int i = 0; i < k; i++)
+		{
+			int idx = Globals.Random.Next(allSlices.Count);
+			Slice s = allSlices[idx];
+			allSlices.RemoveAt(idx);
+
+			yield return s;
+		}
 	}
 
 	public void SimulateMoves(IEnumerable<Move> moves)
@@ -62,6 +60,11 @@ public partial class Pie : Control
 			.Run(() => EmitSignal(SignalName.SimulationDone));
 
 		this.BetterTimer.Start();
+	}
+
+	public void DeactivateAllSlices()
+	{
+		DeactivateSlices(this.AllSlices());
 	}
 
 	private static void ActivateSlices(IEnumerable<Slice> slices)

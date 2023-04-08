@@ -11,25 +11,28 @@ public class Game
 	private readonly Pie Pie;
 	private int NextVerifyMoveIdx;
 	private HashSet<Slice> CurrentMoveSet;
-	private readonly Random Random = new();
 
 	public bool AcceptUserInput { get; private set; }
 
-	public Game(Pie pie)
+	public Game(Pie pie) : this(pie, new Random().Next())
+	{
+	}
+
+	public Game(Pie pie, int seed)
 	{
 		this.Pie = pie;
 		this.AcceptUserInput = true;
 
 		this.Pie.SimulationDone += this.AfterSimulation;
+		GD.Print(seed);
+		Globals.Random = new(seed);
 	}
 
 	public void AddRandomMove()
 	{
-		Slice slice = this.Pie.RandomSlice(this.Random);
-		this.AddMove(new(new()
-		{
-			slice,
-		}));
+		HashSet<Slice> slices = this.Pie.RandomSlices().ToHashSet();
+
+		this.AddMove(new(slices));
 		this.ResetMoveVerification();
 	}
 
@@ -85,6 +88,7 @@ public class Game
 	{
 		if (this.NextVerifyMoveIdx >= this.Moves.Count) return;
 
+		this.Pie.DeactivateAllSlices();
 		this.CurrentMoveSet = this.Moves[this.NextVerifyMoveIdx++].Slices.ToHashSet();
 	}
 
