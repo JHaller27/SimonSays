@@ -25,6 +25,8 @@ public partial class MainScene : Control
 		this.Game = new(this.Pie);
 		this.Game.AddRandomMove();
 		this.GameLabel.DoneDisplaying += this.ResetRound;
+
+		this.Game.PlayMoves();
 	}
 
 	public override void _Input(InputEvent inputEvent)
