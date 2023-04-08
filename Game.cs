@@ -6,8 +6,8 @@ namespace SimonSays;
 
 public class Game
 {
-	private List<Move> Moves = new();
-	private Pie Pie;
+	private readonly List<Move> Moves = new();
+	private readonly Pie Pie;
 	private int VerifyMoveIdx;
 
 	public bool AcceptUserInput { get; private set; }

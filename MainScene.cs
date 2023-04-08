@@ -9,7 +9,7 @@ public partial class MainScene : Control
 	[Export] private Pie Pie { get; set; }
 
 	private Game Game { get; set; }
-	private Random Random = new();
+	private readonly Random Random = new();
 
 	private static readonly Dictionary<string, Func<Pie, Slice>> ActionMap = new()
 	{
