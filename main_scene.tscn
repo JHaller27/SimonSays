@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://djlljjwmsffit"]
+[gd_scene load_steps=5 format=3 uid="uid://bn8cmuaspsu6p"]
 
 [ext_resource type="PackedScene" uid="uid://cn0sxda11cq7e" path="res://Pie.tscn" id="1_13wa3"]
 [ext_resource type="Script" path="res://MainScene.cs" id="1_upu1m"]
+[ext_resource type="Script" path="res://GameLabel.cs" id="3_euxna"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ckmpg"]
 font_size = 64
 
-[node name="MainScene" type="Control" node_paths=PackedStringArray("Pie")]
+[node name="MainScene" type="Control" node_paths=PackedStringArray("Pie", "GameLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,6 +16,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_upu1m")
 Pie = NodePath("Pie")
+GameLabel = NodePath("GameLabel")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -36,7 +38,8 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
 
-[node name="Label" type="Label" parent="."]
+[node name="GameLabel" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -53,3 +56,7 @@ text = "Test text"
 label_settings = SubResource("LabelSettings_ckmpg")
 horizontal_alignment = 1
 vertical_alignment = 1
+script = ExtResource("3_euxna")
+DefaultDuration = 1.0
+
+[node name="Timer" type="Timer" parent="GameLabel"]

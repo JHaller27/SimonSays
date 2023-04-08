@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Godot;
 
 namespace SimonSays;
@@ -15,6 +14,8 @@ public class BetterTimer
 	{
 		this.BaseTimer = timer;
 		this.BaseTimer.Timeout += this.RunNext;
+		this.BaseTimer.OneShot = true;
+		this.BaseTimer.Autostart = false;
 	}
 
 	public BetterTimer Clear()
