@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cn0sxda11cq7e"]
+
+[ext_resource type="PackedScene" uid="uid://c38fybehfv2jl" path="res://Slice.tscn" id="1_dscms"]
+[ext_resource type="Script" path="res://Pie.cs" id="1_ysqe7"]
+
+[node name="Pie" type="Node2D"]
+script = ExtResource("1_ysqe7")
+
+[node name="TopSlice" parent="." instance=ExtResource("1_dscms")]
+position = Vector2(0, -384)
+
+[node name="BottomSlice" parent="." instance=ExtResource("1_dscms")]
+position = Vector2(0, 384)
+rotation = 3.14159
+
+[node name="LeftSlice" parent="." instance=ExtResource("1_dscms")]
+position = Vector2(-384, 0)
+rotation = -1.5708
+
+[node name="RightSlice" parent="." instance=ExtResource("1_dscms")]
+position = Vector2(384, 0)
+rotation = 1.5708
