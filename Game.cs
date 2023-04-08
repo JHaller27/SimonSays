@@ -28,6 +28,8 @@ public class Game
 		Globals.Random = new(seed);
 	}
 
+	public int MoveCount() => this.Moves.Count;
+
 	public void AddRandomMove()
 	{
 		HashSet<Slice> slices = this.Pie.RandomSlices().ToHashSet();

@@ -11,6 +11,7 @@ public partial class MainScene : Control
 	[Export] private GameLabel GameLabel;
 
 	private Game Game { get; set; }
+	private Label RoundLabel;
 
 	private static readonly Dictionary<string, Func<Pie, Slice>> ActionMap = new()
 	{
@@ -22,11 +23,13 @@ public partial class MainScene : Control
 
 	public override void _Ready()
 	{
+		this.RoundLabel = this.GetNode<Label>("RoundContainer/Value");
+
 		this.Game = new(this.Pie);
 		this.Game.AddRandomMove();
 		this.GameLabel.DoneDisplaying += this.ResetRound;
 
-		this.Game.PlayMoves();
+		this.ResetRound();
 	}
 
 	public override void _Input(InputEvent inputEvent)
@@ -90,6 +93,7 @@ public partial class MainScene : Control
 
 	private void ResetRound()
 	{
+		this.RoundLabel.Text = this.Game.MoveCount().ToString();
 		this.Game.ResetMoveVerification();
 		this.Game.PlayMoves();
 	}

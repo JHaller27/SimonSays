@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bn8cmuaspsu6p"]
+[gd_scene load_steps=6 format=3 uid="uid://bn8cmuaspsu6p"]
 
 [ext_resource type="PackedScene" uid="uid://cn0sxda11cq7e" path="res://Pie.tscn" id="1_13wa3"]
 [ext_resource type="Script" path="res://MainScene.cs" id="1_upu1m"]
 [ext_resource type="Script" path="res://GameLabel.cs" id="3_euxna"]
+[ext_resource type="LabelSettings" uid="uid://ca102a4sfogda" path="res://RoundLabelSettings.tres" id="4_ss4fo"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ckmpg"]
 font_size = 64
@@ -60,3 +61,18 @@ script = ExtResource("3_euxna")
 DefaultDuration = 1.0
 
 [node name="Timer" type="Timer" parent="GameLabel"]
+
+[node name="RoundContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="RoundContainer"]
+layout_mode = 2
+text = "Round: "
+label_settings = ExtResource("4_ss4fo")
+
+[node name="Value" type="Label" parent="RoundContainer"]
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("4_ss4fo")
