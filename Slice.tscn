@@ -24,3 +24,4 @@ grow_vertical = 2
 texture = ExtResource("1_d5gty")
 
 [node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0
