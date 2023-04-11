@@ -49,7 +49,7 @@ public partial class Slice : Control
 
 		public void Process()
 		{
-			this.Slice.Modulate = this.Color;
+			this.Slice.Modulate = this.Color.A != 0 ? this.Color : Colors.White;
 		}
 
 		protected abstract Color Color { get; }
