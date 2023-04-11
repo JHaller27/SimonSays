@@ -2,6 +2,7 @@ using Godot;
 
 namespace SimonSays;
 
+[Tool]
 public partial class Slice : Control
 {
 	[Export] private Color ActiveColor { get; set; }
@@ -16,24 +17,23 @@ public partial class Slice : Control
 	public override void _Ready()
 	{
 		base._Ready();
-		this.SetState(new InactiveState(this));
+		this.CurrentState = new InactiveState(this);
 
 		this.AudioPlayer().Stream = this.AudioStream;
 	}
 
+	public override void _Process(double delta)
+	{
+		this.CurrentState.Process();
+	}
+
 	public void SetActive(bool isActive)
 	{
-		this.SetState(isActive ? new ActiveState(this) : new InactiveState(this));
+		this.CurrentState = isActive ? new ActiveState(this) : new InactiveState(this);
 		if (isActive)
 		{
 			this.AudioPlayer().Play();
 		}
-	}
-
-	private void SetState(State state)
-	{
-		this.CurrentState = state;
-		this.CurrentState.Activate();
 	}
 
 	// States
@@ -42,12 +42,12 @@ public partial class Slice : Control
 	{
 		protected Slice Slice { get; }
 
-		public State(Slice slice)
+		protected State(Slice slice)
 		{
 			this.Slice = slice;
 		}
 
-		public void Activate()
+		public void Process()
 		{
 			this.Slice.Modulate = this.Color;
 		}
